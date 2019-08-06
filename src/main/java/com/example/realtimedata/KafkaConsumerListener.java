@@ -1,8 +1,5 @@
 package com.example.realtimedata;
 
-import com.example.realtimedata.model.Log4Db;
-import com.example.realtimedata.repository.LogDAL;
-import com.example.realtimedata.repository.LogDbRepository;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,7 +20,8 @@ public class KafkaConsumerListener {
     @Autowired
     private SimpMessagingTemplate template;
 
-
+    public KafkaConsumerListener() {
+    }
 
     @KafkaListener(topics = "${kafka.topic.in}", containerFactory = "rawKafkaListenerContainerFactory")
     public void listenTopicIn(ConsumerRecord<String, String> cr) throws Exception {
@@ -33,11 +31,7 @@ public class KafkaConsumerListener {
 
     @KafkaListener(topics = "${kafka.topic.out}", containerFactory = "rawKafkaListenerContainerFactory")
     public void listenTopicOut(ConsumerRecord<String, String> cr) throws Exception {
-
         template.convertAndSend(destinationMessagesOut, cr.key() + " " + cr.value());
-
-        System.out.println("DENEMEBIRKI : " + cr.key().toString());
-        System.out.println("DENEMEUCDORT : " + cr.value().toString());
     }
 
 
